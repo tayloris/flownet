@@ -18,26 +18,26 @@ flownet:
 ert:
   static_include_files: ../data/Egg_Model
   realizations:
-    num_realizations: 20
-    required_success_percent: 40
+    num_realizations: 40
+    required_success_percent: 80
     max_runtime: 600
   queue:
     system: LOCAL
     name: mr
-    max_running: 4
+    max_running: 1
   ensemble_weights:
     - 1
 
 model_parameters:
   permeability:
     min: 1
-    max: 500
+    max: 5000
   porosity: 
     min: 0.05
-    max: 0.3
+    max: 0.5
   bulkvolume_mult:
     mean: 0.17
-    max: 0.68
+    max: 0.4    
   relative_permeability:
     scheme: global
     swirr:
@@ -56,8 +56,8 @@ model_parameters:
       min: 0.55
       max: 0.65
     krowend:
-      min: 0.75
-      max: 0.98
+      min: 0.7
+      max: 0.8
     nw:
       min: 2.5
       max: 3.5
@@ -65,7 +65,7 @@ model_parameters:
       min: 3.5
       max: 4.5
   equil:
-    datum_depth: 5000
+    datum_depth: 4000
     datum_pressure:
       min: 400
       max: 400.1
