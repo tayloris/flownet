@@ -173,17 +173,22 @@ class EclipseData(FromSource):
         df_production_data.loc[df_production_data["WWIR"] > 0, "PHASE"] = "WATER"
         df_production_data.loc[df_production_data["WGIR"] > 0, "PHASE"] = "GAS"
 
-        df_production_data["WSTAT"] = df_production_data["WSTAT"].map(
-            {
-                1: "OPEN",  # Producer OPEN
-                2: "OPEN",  # Injector OPEN
-                3: "SHUT",
-                4: "STOP",
-                5: "SHUT",  # PSHUT
-                6: "STOP",  # PSTOP
-                np.nan: "STOP",
-            }
-        )
+        print(df_production_data[["WELL_NAME","WSTAT"]].to_string())
+        if df_production_data["WSTAT"].isna().any():
+            print("value empty")
+            raise RuntimeError(f"The status of each well must be define (OPEN, SHUT, STOP). Please add keyword WSTAT in the SUMMARY section of eclipse case.")
+        else:
+            df_production_data["WSTAT"] = df_production_data["WSTAT"].map(
+                {
+                    1: "OPEN",  # Producer OPEN
+                    2: "OPEN",  # Injector OPEN
+                    3: "SHUT",
+                    4: "STOP",
+                    5: "SHUT",  # PSHUT
+                    6: "STOP",  # PSTOP
+                    np.nan: "STOP",
+                }
+            )
 
         df_production_data["TYPE"] = None
         df_production_data.loc[df_production_data["WOPR"] > 0, "TYPE"] = "OP"
