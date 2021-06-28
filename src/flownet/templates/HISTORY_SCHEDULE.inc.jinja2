@@ -1,24 +1,24 @@
-{%- for date in schedule.get_dates() %}
-
-{%- if schedule.get_keywords(dates=date, kw_class="WELSPECS"): %}
 WELSPECS
 -- WELL GROUP LOCATION BHP   PHASE DRAIN INFLOW OPEN CROSS PVT   DEN FIPNUM
 -- NAME NAME  I J      DEPTH FLUID AREA  EQUANS SHUT FLOW  TABLE OPT TABLE
+{%- for date in schedule.get_dates() %}
+{%- if schedule.get_keywords(dates=date, kw_class="WELSPECS"): %}
 {%- for kw in schedule.get_keywords(dates=date, kw_class="WELSPECS"): %}
  '{{ kw.well_name }}' {{ kw.group_name }} {{ kw.i + 1}} {{ kw.j + 1 }} {{ kw.ref_depth_bhp }} '{{ kw.phase }}' {{ kw.drainge_radius }} {{ kw.inflow_equation }} {{ kw.shutin_instruction }} {{ kw.crossflow }} {{ kw.pvt_table }} {{ kw.density_calc }} {{ kw.fip }} /
 {%- endfor %}
-/
 {%- endif %}
-
-{%- if schedule.get_keywords(dates=date, kw_class="COMPDAT"): %}
+{%- endfor %}
+/
 COMPDAT
 -- WELL --- LOCATION --- OPEN SAT CONN WELL KH   SKIN D    DIR
 -- NAME  II  JJ  K1  K2  SHUT TAB FACT DIA  FACT FACT FACT PEN
-{%- for kw in schedule.get_keywords(dates=date, kw_class="COMPDAT"): %}
- '{{ kw.well_name }}' {{ kw.i + 1 }} {{ kw.j + 1}} {{ kw.k1 + 1 }} {{ kw.k2 + 1 }} {{ kw.status }} {{ kw.satnum }} {{ kw.confact }} {{ kw.rw }} {{ kw.kh }} {{ kw.skin }} {{ kw.dfact }} {{ kw.direct }} /
+{%- for well_name in schedule.get_wells(kw_class="COMPDAT") -%}
+{%- for kw in schedule.get_keywords( well_name=well_name, kw_class="COMPDAT" ,dates = schedule.get_well_start_date(well_name=well_name)): %}
+ '{{ kw.well_name }}' {{ kw.i + 1 }} {{ kw.j + 1}} {{ kw.k1 + 1 }} {{ kw.k2 + 1 }} OPEN {{ kw.satnum }} {{ kw.confact }} {{ kw.rw }} {{ kw.kh }} {{ kw.skin }} {{ kw.dfact }} {{ kw.direct }} /
+{%- endfor %}
 {%- endfor %}
 /
-{%- endif %}
+{%- for date in schedule.get_dates() %}
 
 {%- if schedule.get_keywords(dates=date, kw_class="WCONHIST"): %}
 WCONHIST
